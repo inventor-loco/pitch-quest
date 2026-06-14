@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfect Pitch Quest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <!-- Game Canvas will be injected here by Phaser -->
+      <div id="game-container"></div>
+      
+      <!-- UI Overlay -->
+      <div id="ui-overlay" class="hidden">
+        <!-- Top Area -->
+        <div class="top-hud">
+          <div class="target-note-panel">
+            <span class="label">Target</span>
+            <span id="target-note" class="value">G4</span>
+          </div>
+          <div class="accuracy-meter">
+            <span id="accuracy-text" class="pulse">Waiting...</span>
+          </div>
+        </div>
+
+        <!-- Right Side: Tuner -->
+        <div class="right-hud">
+          <div class="tuner-panel">
+            <h3 class="label">Tuner</h3>
+            <div class="current-note-display">
+              <span id="current-note">--</span>
+            </div>
+            <div class="tuner-gauge">
+              <div class="tuner-needle" id="tuner-needle"></div>
+              <div class="tuner-markers">
+                <span class="flat">b</span>
+                <span class="center">|</span>
+                <span class="sharp">#</span>
+              </div>
+            </div>
+            <div class="cents-display">
+              <span id="cents-value">0</span> cents
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Area: Progress -->
+        <div class="bottom-hud">
+          <div class="song-info">
+            <span id="song-title">Song Title</span>
+            <span id="song-progress-text">0%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start Menu Overlay -->
+      <div id="start-menu" class="overlay-menu">
+        <div class="menu-content glass-panel">
+          <h1>Perfect Pitch Quest</h1>
+          <p>Sing or play your instrument to move Mozart along the staff!</p>
+          <div class="level-select">
+            <button class="btn level-btn" data-level="0">Level 1: Hot Cross Buns</button>
+            <button class="btn level-btn" data-level="1">Level 2: Mary Had a Little Lamb</button>
+            <button class="btn level-btn" data-level="2">Level 3: Ode to Joy</button>
+          </div>
+          <p class="hint">Microphone access is required to play.</p>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
