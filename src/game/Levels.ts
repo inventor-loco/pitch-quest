@@ -68,6 +68,80 @@ export const levels: Level[] = [
             { noteString: "D", duration: 0.5 },
             { noteString: "D", duration: 2 },
         ]
+    },
+    {
+        title: "C Major Scale",
+        notes: [
+            { noteString: "C", duration: 1 },
+            { noteString: "D", duration: 1 },
+            { noteString: "E", duration: 1 },
+            { noteString: "F", duration: 1 },
+            { noteString: "G", duration: 1 },
+            { noteString: "A", duration: 1 },
+            { noteString: "B", duration: 1 },
+            { noteString: "C", duration: 2 },
+            { noteString: "B", duration: 1 },
+            { noteString: "A", duration: 1 },
+            { noteString: "G", duration: 1 },
+            { noteString: "F", duration: 1 },
+            { noteString: "E", duration: 1 },
+            { noteString: "D", duration: 1 },
+            { noteString: "C", duration: 2 },
+        ]
+    },
+    {
+        title: "A Minor Scale",
+        notes: [
+            { noteString: "A", duration: 1 },
+            { noteString: "B", duration: 1 },
+            { noteString: "C", duration: 1 },
+            { noteString: "D", duration: 1 },
+            { noteString: "E", duration: 1 },
+            { noteString: "F", duration: 1 },
+            { noteString: "G", duration: 1 },
+            { noteString: "A", duration: 2 },
+            { noteString: "G", duration: 1 },
+            { noteString: "F", duration: 1 },
+            { noteString: "E", duration: 1 },
+            { noteString: "D", duration: 1 },
+            { noteString: "C", duration: 1 },
+            { noteString: "B", duration: 1 },
+            { noteString: "A", duration: 2 },
+        ]
+    },
+    {
+        title: "C Major Pentatonic Scale",
+        notes: [
+            { noteString: "C", duration: 1 },
+            { noteString: "D", duration: 1 },
+            { noteString: "E", duration: 1 },
+            { noteString: "G", duration: 1 },
+            { noteString: "A", duration: 1 },
+            { noteString: "C", duration: 2 },
+            { noteString: "A", duration: 1 },
+            { noteString: "G", duration: 1 },
+            { noteString: "E", duration: 1 },
+            { noteString: "D", duration: 1 },
+            { noteString: "C", duration: 2 },
+        ]
+    },
+    {
+        title: "Chromatic Scale",
+        notes: [
+            { noteString: "C", duration: 1 },
+            { noteString: "C#", duration: 1 },
+            { noteString: "D", duration: 1 },
+            { noteString: "D#", duration: 1 },
+            { noteString: "E", duration: 1 },
+            { noteString: "F", duration: 1 },
+            { noteString: "F#", duration: 1 },
+            { noteString: "G", duration: 1 },
+            { noteString: "G#", duration: 1 },
+            { noteString: "A", duration: 1 },
+            { noteString: "A#", duration: 1 },
+            { noteString: "B", duration: 1 },
+            { noteString: "C", duration: 2 },
+        ]
     }
 ];
 
