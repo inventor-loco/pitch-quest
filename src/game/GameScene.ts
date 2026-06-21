@@ -16,6 +16,7 @@ export default class GameScene extends Phaser.Scene {
 
     private isMatching: boolean = false;
     private matchDurationRequired = 750; // ms
+    private centsTolerance: number = 30;
 
     // HUD Elements
     private uiTargetNote = document.getElementById('target-note');
@@ -31,9 +32,10 @@ export default class GameScene extends Phaser.Scene {
         super('GameScene');
     }
 
-    init(data: { levelIndex: number }) {
+    init(data: { levelIndex: number; centsTolerance?: number }) {
         this.currentLevel = levels[data.levelIndex || 0];
         this.currentNoteIndex = 0;
+        this.centsTolerance = data.centsTolerance ?? 30;
         this.audioDetector = new AudioPitchDetector();
     }
 
@@ -180,7 +182,7 @@ export default class GameScene extends Phaser.Scene {
             this.updateTunerHUD(pitch);
 
             // Check if pitch matches target (octave independent)
-            if (pitch.noteClass === this.targetNoteClass && Math.abs(pitch.cents) <= 30) {
+            if (pitch.noteClass === this.targetNoteClass && Math.abs(pitch.cents) <= this.centsTolerance) {
                 if (!this.isMatching) {
                     this.isMatching = true;
                     this.heldTime = 0;
@@ -223,7 +225,7 @@ export default class GameScene extends Phaser.Scene {
                     if (pitch.noteClass !== this.targetNoteClass) {
                         this.uiAccuracy.innerText = "WRONG NOTE";
                         this.uiAccuracy.style.color = "var(--danger)";
-                    } else if (pitch.cents > 30) {
+                    } else if (pitch.cents > this.centsTolerance) {
                         this.uiAccuracy.innerText = "TOO SHARP";
                         this.uiAccuracy.style.color = "var(--danger)";
                     } else {
@@ -256,10 +258,11 @@ export default class GameScene extends Phaser.Scene {
             const pct = Math.max(0, Math.min(100, (pitch.cents + 50)));
             this.uiTunerNeedle.style.left = `${pct}%`;
             
-            // Color coding
-            if (Math.abs(pitch.cents) <= 10) {
+            // Color coding scales with the chosen tolerance
+            const absCents = Math.abs(pitch.cents);
+            if (absCents <= this.centsTolerance / 3) {
                 this.uiTunerNeedle.style.backgroundColor = "var(--success)";
-            } else if (Math.abs(pitch.cents) <= 30) {
+            } else if (absCents <= this.centsTolerance) {
                 this.uiTunerNeedle.style.backgroundColor = "var(--warning)";
             } else {
                 this.uiTunerNeedle.style.backgroundColor = "var(--danger)";
