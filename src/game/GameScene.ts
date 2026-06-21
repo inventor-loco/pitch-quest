@@ -44,6 +44,8 @@ export default class GameScene extends Phaser.Scene {
     // Vertical pitch indicator (the "tuner" — your sung pitch rides to meet the notes)
     private pitchMarker?: Phaser.GameObjects.Triangle;
     private pitchGuide?: Phaser.GameObjects.Line;
+    private hadPitch = false;                       // was the player singing last frame?
+    private markerBounceTween?: Phaser.Tweens.Tween; // gentle drop when singing stops
 
     // Scoring
     private score = 0;
@@ -81,6 +83,8 @@ export default class GameScene extends Phaser.Scene {
         this.maxCombo = 0;
         this.hits = 0;
         this.judgedCount = 0;
+        this.hadPitch = false;
+        this.markerBounceTween = undefined;
     }
 
     async create() {
@@ -265,20 +269,41 @@ export default class GameScene extends Phaser.Scene {
 
     updatePitchMarker(pitch: PitchResult | null) {
         if (!this.pitchMarker) return;
+
         if (pitch) {
+            // Singing: cancel any drop and snap the marker to the sung pitch height
+            if (this.markerBounceTween) { this.markerBounceTween.stop(); this.markerBounceTween = undefined; }
+
             const baseY = this.getStaffYForNote(pitch.noteString);
             const y = baseY - (pitch.cents / 100) * (this.staffSpacing / 2);
             const clamped = Phaser.Math.Clamp(y, this.staffTopY - this.staffSpacing, this.staffTopY + this.staffSpacing * 4);
             this.pitchMarker.y = clamped;
             this.pitchMarker.setAlpha(1);
-            if (this.pitchGuide) this.pitchGuide.setTo(0, clamped, this.cameras.main.width, clamped);
+            this.syncPitchGuide();
 
             const abs = Math.abs(pitch.cents);
             const color = abs <= this.centsTolerance / 3 ? 0x10b981 : abs <= this.centsTolerance ? 0xeab308 : 0xef4444;
             this.pitchMarker.setFillStyle(color);
+            this.hadPitch = true;
         } else {
-            this.pitchMarker.setAlpha(0.3);
-            this.pitchMarker.setFillStyle(0x64748b);
+            // Silence: keep the last note visible and let it gently bounce down once
+            if (this.hadPitch && !this.markerBounceTween) {
+                const floorY = this.staffTopY + this.staffSpacing * 4; // bottom of the pentagram
+                this.markerBounceTween = this.tweens.add({
+                    targets: this.pitchMarker,
+                    y: floorY,
+                    duration: 1500,
+                    ease: 'Bounce.easeOut',
+                    onUpdate: () => this.syncPitchGuide()
+                });
+            }
+            this.hadPitch = false;
+        }
+    }
+
+    private syncPitchGuide() {
+        if (this.pitchGuide && this.pitchMarker) {
+            this.pitchGuide.setTo(0, this.pitchMarker.y, this.cameras.main.width, this.pitchMarker.y);
         }
     }
 
