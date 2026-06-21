@@ -67,6 +67,9 @@ export default class GameScene extends Phaser.Scene {
         this.mozartSprite = this.add.sprite(100, this.getStaffYForNote(this.currentLevel.notes[0].noteString), 'mozart');
         this.mozartSprite.setScale(3); // adjust scale based on the generated pixel art
         
+        // Hint: click target note panel to hear the note
+        document.getElementById('target-note-panel')?.addEventListener('click', () => this.playHintTone());
+
         // Start Audio
         try {
             await this.audioDetector.initialize();
@@ -246,6 +249,34 @@ export default class GameScene extends Phaser.Scene {
                 this.uiAccuracy.style.color = "var(--text-main)";
             }
             if (this.uiCents) this.uiCents.innerText = "0";
+        }
+    }
+
+    playHintTone() {
+        // freq for octave 4: A4=440, so noteClass 0 (C) = 440 * 2^((0-9)/12)
+        const freq = 440 * Math.pow(2, (this.targetNoteClass - 9) / 12);
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.5, ctx.currentTime + 0.7);
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.0);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 1.0);
+        osc.onended = () => ctx.close();
+
+        // Visual feedback
+        const panel = document.getElementById('target-note-panel');
+        if (panel) {
+            panel.classList.add('playing');
+            setTimeout(() => panel.classList.remove('playing'), 1000);
         }
     }
 
